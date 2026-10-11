@@ -347,7 +347,7 @@
       </div>
 
       <div class="chrono">
-        <small>Écran ouvert à tout le monde depuis</small>
+        <small>Écran ouvert à tout le bureau depuis</small>
         <b id="compteur">00:00</b>
         <small id="palier"></small>
         <small>Ouvert le <span id="heure">--:--</span></small>
@@ -397,8 +397,10 @@
     ["", "Win + L", ", ça se tape avec une seule main."],
     ["Ton PC dit merci de l'avoir laissé ouvert. ", "Win + L", "."],
     ["Une session ouverte, c'est une invitation. ", "Win + L", "."],
-    ["", "Win + L", ", même les profs le font."],
+    ["", "Win + L", ", même la DSI le fait."],
     ["Si t'avais fait ", "Win + L", " tu verrais pas ça."],
+    ["Le bureau te remercie. ", "Win + L", " la prochaine fois."],
+    ["Ta boîte mail était en libre accès. ", "Win + L", "."],
     ["You forgot ", "Win + L", ""],
     ["", "Win + L", ". Two keys. One second."],
     ["Unlocked PC, unlocked life. ", "Win + L", "."],
@@ -415,40 +417,38 @@
 
   // 6. Piques qui tournent, aussi utilisées dans la bande défilante
   var piques = [
-    "Session ouverte, constaté par la classe",
+    "Session ouverte, constatée par un collègue",
     "Ton historique a été consulté avec intérêt",
-    "Un mail à ton prof était à deux clics",
+    "Un mail à tous le service était à deux clics",
     "Le fond d'écran a fait l'unanimité contre lui",
     "Ton mot de passe est très bien, dommage qu'il serve à rien",
     "Le PC est en libre-service jusqu'à ton retour",
     "Deux touches. Une seconde. Zéro humiliation",
     "Win + L ce n'est pas une option, c'est un réflexe",
     "Quelqu'un a peut-être changé ta langue de clavier",
-    "Le poste appartient à celui qui passe devant",
+    "Le poste appartient à celui qui passe dans le couloir",
     "Ta session, notre terrain de jeu",
     "Verrouiller, c'est gratuit et ça prend moins d'une seconde",
     "La touche Windows est en bas à gauche, le L à droite du K",
-    "Win + L : la seule combinaison qui protège ta dignité",
-    "Un PC ouvert, c'est un journal intime sur la table",
+    "Win + L : la seule combinaison qui protège ta boîte mail",
+    "Un poste ouvert, c'est un dossier RH posé sur la table",
     "Ton navigateur connaît tes recherches, nous aussi maintenant",
     "Une session ouverte, c'est une invitation acceptée",
-    "Tes onglets ont été passés en revue et notés",
+    "Tes onglets ont été passés en revue, deux fois",
     "Tu te lèves, tu verrouilles. Tu reviens, tu déverrouilles. C'est tout",
     "Même ta montre te dirait de verrouiller",
     "Verrouillé en 1 seconde ou ouvert pendant 20 minutes, tu choisis",
     "Le mot de passe, c'est bien. Le taper, c'est mieux",
     "Ce message a été écrit sur ton propre PC",
     "Quelqu'un a réglé ton volume à fond. Ou pas. Tu verras",
-    "Ton PC n'a pas de secret pour la classe",
-    "Poste ouvert : la salle informatique version buffet à volonté",
-    "Lock your screen. Every time. No exceptions",
-    "An unlocked PC is an open diary",
-    "Win + L takes one second. This took twenty minutes",
-    "Your tabs have been reviewed. Grade : F",
-    "Locked in one second or open for an hour, your call",
-    "Nothing personal. Everything visible",
-    "Press Win + L before you stand up, not after you come back",
-    "This message was typed on your own keyboard"
+    "Ton poste n'a plus de secret pour l'équipe",
+    "Poste ouvert : le bureau version buffet à volonté",
+    "La DSI appelle ça un incident de sécurité, nous on appelle ça mardi",
+    "Un message envoyé depuis ton compte, ça porte quand même ton nom",
+    "Ton statut Teams disait absent, ta session disait bienvenue",
+    "Cinq minutes à la machine à café, cinq minutes de session ouverte",
+    "Tes fichiers partagés étaient accessibles sans mot de passe. Le tien",
+    "Une réunion ne dure jamais aussi peu de temps que tu l'imagines"
   ];
   var piste = document.getElementById('piste');
   var texte = piques.map(function(p){ return '<span>' + p + '</span>'; }).join('');
@@ -468,14 +468,14 @@
     [30,   "Trente secondes. Quelqu'un a déjà lu tes onglets."],
     [60,   "Une minute. Ça fait long, une minute."],
     [120,  "Deux minutes. Ton fond d'écran a été jugé."],
-    [300,  "Cinq minutes. Toute la classe est passée devant."],
-    [600,  "Dix minutes. On aurait pu rendre un devoir à ta place."],
+    [300,  "Cinq minutes. Tout ton bureau est passé devant."],
+    [600,  "Dix minutes. On aurait pu envoyer un mail à ta place."],
     [900,  "Un quart d'heure. Ton mot de passe ne sert plus à rien."],
     [1800, "Trente minutes. À ce stade c'est un poste en libre-service."],
-    [3600, "Une heure. Le PC appartient à la classe maintenant."],
+    [3600, "Une heure. Le poste appartient à l'équipe maintenant."],
     [5400, "Une heure et demie. On a eu le temps de changer ton fond d'écran deux fois."],
     [7200, "Deux heures. Tu es parti manger ou déménager ?"],
-    [10800, "Trois heures. Le poste a plus vu la classe que toi aujourd'hui."]
+    [10800, "Trois heures. Le poste a vu plus de collègues que toi aujourd'hui."]
   ];
   var palierActuel = -1, timerPique = null, indexPique = Math.floor(Math.random() * piques.length);
   function afficherLigne(txt){
@@ -557,7 +557,7 @@
       'Incident <b>n\u00B0 ' + numero + '</b><br>' +
       'Poste <b>' + poste + '</b><br>' +
       'Constaté <b>' + jours[d.getDay()] + ' à ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + '</b><br>' +
-      'Par <b>la classe</b> \u00B7 Suite : <b>Win + L</b>';
+      'Par <b>un collègue</b> \u00B7 Suite : <b>Win + L</b>';
 
     // 4. Date sur le mot laissé par la victime
     document.getElementById('postit-date').textContent =
@@ -570,7 +570,7 @@
   }, 10000);
 
   // Titre + icône d'onglet qui clignotent
-  var titres = ['⚠ PC NON VERROUILLÉ', 'WIN + L !!!', '⚠ SESSION OUVERTE'];
+  var titres = ['⚠ POSTE NON VERROUILLÉ', 'WIN + L !!!', '⚠ SESSION OUVERTE'];
   var icones = [
     "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='#ffd21f'/><path d='M16 4 3 28h26z' fill='#0b0a08'/><rect x='14.5' y='12' width='3' height='8' fill='#ffd21f'/><circle cx='16' cy='23.5' r='1.8' fill='#ffd21f'/></svg>"),
     "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='#e5261b'/><rect x='7' y='15' width='18' height='13' rx='2' fill='#fbf6e6'/><path d='M19 15v-5a5 5 0 0 1 10 0v2' fill='none' stroke='#fbf6e6' stroke-width='3'/></svg>")
