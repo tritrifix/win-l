@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="t d">
+  <title id="t">WIN + L</title>
+  <desc id="d">Écran d'alerte « Poste non verrouillé » : bandes de chantier jaunes et noires, touches Windows et L, chronomètre et post-it.</desc>
+  <defs>
+    <pattern id="rayures" width="56" height="56" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="56" height="56" fill="#0b0a08"/>
+      <rect width="28" height="56" fill="#ffd21f"/>
+    </pattern>
+    <radialGradient id="halo" cx="50%" cy="50%" r="60%">
+      <stop offset="0" stop-color="#5c0808"/>
+      <stop offset="1" stop-color="#0b0a08"/>
+    </radialGradient>
+    <linearGradient id="touche" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4ecd6"/>
+      <stop offset="1" stop-color="#d8cfb5"/>
+    </linearGradient>
+    <pattern id="scan" width="4" height="3" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#000" opacity=".28"/>
+    </pattern>
+  </defs>
+
+  <!-- Fond -->
+  <rect width="1200" height="630" fill="url(#halo)"/>
+
+  <!-- Bandes de chantier -->
+  <rect width="1200" height="48" fill="url(#rayures)"/>
+  <rect y="582" width="1200" height="48" fill="url(#rayures)"/>
+
+  <!-- Bandeau défilant -->
+  <rect y="538" width="1200" height="44" fill="#0b0a08"/>
+  <rect y="538" width="1200" height="2" fill="#ffd21f"/>
+  <rect y="580" width="1200" height="2" fill="#ffd21f"/>
+  <text x="-20" y="568" fill="#ffd21f" font-family="Anton, Impact, 'Arial Narrow', sans-serif" font-size="22" letter-spacing="1.2">
+    VERROUILLER, C'EST GRATUIT <tspan fill="#e5261b">◆</tspan> TA SESSION, NOTRE TERRAIN DE JEU <tspan fill="#e5261b">◆</tspan> DEUX TOUCHES. UNE SECONDE. ZÉRO CROISSANTS <tspan fill="#e5261b">◆</tspan> WIN + L
+  </text>
+
+  <!-- Étiquette -->
+  <g font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-weight="600">
+    <rect x="404" y="101" width="60" height="2" fill="#ffd21f"/>
+    <circle cx="486" cy="102" r="12" fill="#e5261b" opacity=".35"/>
+    <circle cx="486" cy="102" r="7" fill="#e5261b" stroke="#0b0a08" stroke-width="3"/>
+    <text x="504" y="107" fill="#ffd21f" font-size="14" letter-spacing="4">POSTE NON VERROUILLÉ</text>
+    <rect x="768" y="101" width="60" height="2" fill="#ffd21f"/>
+  </g>
+
+  <!-- Titre -->
+  <g font-family="Anton, Impact, 'Arial Narrow', sans-serif" font-size="78" text-anchor="middle">
+    <text x="600" y="200" fill="#fbf6e6">T'AS OUBLIÉ</text>
+    <rect x="410" y="214" width="380" height="84" fill="#ffd21f"/>
+    <text x="600" y="286" fill="#0b0a08">WIN + L</text>
+  </g>
+
+  <!-- Touches -->
+  <g transform="translate(436 330)">
+    <rect x="0" y="16" width="120" height="104" rx="12" fill="#3a3630"/>
+    <rect x="0" y="8" width="120" height="104" rx="12" fill="#7d7462"/>
+    <rect x="0" y="0" width="120" height="104" rx="12" fill="url(#touche)"/>
+    <path transform="translate(27 19) scale(2.75)" fill="#0b0a08" d="M3 4.5 11 3.4v8.1H3zM13 3.1 21 2v9.5h-8zM3 12.5h8v8.1L3 19.5zM13 12.5h8V22l-8-1.1z"/>
+  </g>
+  <text x="600" y="402" text-anchor="middle" fill="#ffd21f" font-family="Anton, Impact, 'Arial Narrow', sans-serif" font-size="58">+</text>
+  <g transform="translate(644 330)">
+    <rect x="0" y="16" width="120" height="104" rx="12" fill="#3a3630"/>
+    <rect x="0" y="8" width="120" height="104" rx="12" fill="#7d7462"/>
+    <rect x="0" y="0" width="120" height="104" rx="12" fill="url(#touche)"/>
+    <text x="60" y="82" text-anchor="middle" fill="#0b0a08" font-family="Anton, Impact, 'Arial Narrow', sans-serif" font-size="72">L</text>
+  </g>
+
+  <!-- Chrono façon afficheur d'aéroport -->
+  <g font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" text-anchor="middle">
+    <text x="600" y="474" fill="#b9b2a0" font-size="14">Écran ouvert à tout le bureau depuis</text>
+    <g font-size="34" font-weight="600" fill="#ffd21f">
+      <rect x="532" y="483" width="28" height="40" rx="3" fill="#1a1712"/>
+      <rect x="564" y="483" width="28" height="40" rx="3" fill="#1a1712"/>
+      <rect x="608" y="483" width="28" height="40" rx="3" fill="#1a1712"/>
+      <rect x="640" y="483" width="28" height="40" rx="3" fill="#1a1712"/>
+      <text x="546" y="515">1</text><text x="578" y="515">2</text>
+      <text x="600" y="513">:</text>
+      <text x="622" y="515">4</text><text x="654" y="515">7</text>
+      <rect x="532" y="502" width="136" height="2" fill="#0b0a08"/>
+    </g>
+  </g>
+
+  <!-- Rapport d'incident -->
+  <g font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="12" letter-spacing="1.6" fill="#b9b2a0">
+    <rect x="48" y="420" width="3" height="88" fill="#e5261b"/>
+    <text x="62" y="436">INCIDENT <tspan fill="#fbf6e6" font-weight="600">N° 2026-10-26-03</tspan></text>
+    <text x="62" y="458">POSTE <tspan fill="#fbf6e6" font-weight="600">WINDOWS · 1920×1080</tspan></text>
+    <text x="62" y="480">CONSTATÉ <tspan fill="#fbf6e6" font-weight="600">LUNDI À 10:12</tspan></text>
+    <text x="62" y="502">SUITE : <tspan fill="#fbf6e6" font-weight="600">WIN + L</tspan></text>
+  </g>
+
+  <!-- Post-it -->
+  <g transform="translate(940 92) rotate(-4)">
+    <rect x="6" y="10" width="210" height="150" fill="#000" opacity=".45"/>
+    <rect width="210" height="150" fill="#ffe66a"/>
+    <rect x="70" y="-10" width="70" height="20" fill="#fff" opacity=".45" transform="rotate(2 105 0)"/>
+    <g font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="13" fill="#2a2410">
+      <text x="16" y="38">Message laissé par</text>
+      <text x="16" y="56">toi-même :</text>
+      <text x="16" y="84">« Je verrouille la</text>
+      <text x="16" y="102">prochaine fois,</text>
+      <text x="16" y="120"><tspan text-decoration="underline">promis</tspan>. »</text>
+    </g>
+  </g>
+
+  <!-- Scanlines -->
+  <rect width="1200" height="630" fill="url(#scan)"/>
+</svg>
