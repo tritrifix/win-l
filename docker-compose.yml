@@ -1,7 +1,7 @@
 services:
   web:
     image: nginx:alpine
-    container_name: web-index
+    container_name: win-l
     ports:
       - "8080:80"
     volumes:
