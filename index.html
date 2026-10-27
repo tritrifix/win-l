@@ -143,21 +143,28 @@
     border-radius: .1em;
     box-shadow: 0 .16em 0 #7d7462, 0 .3em 0 #3a3630, 0 .5em 1.4em rgba(0,0,0,.6);
     display: grid; place-items: center;
-    animation: enfonceWin 2.8s ease-in-out infinite;
+    animation: enfonce1 2.8s ease-in-out infinite;
   }
-  .touche.win svg { width: .9em; height: .9em; display: block; }
-  .touche.l { animation-name: enfonceL; }
-  /* Windows s'enfonce la première et reste maintenue. */
-  @keyframes enfonceWin {
-    0%, 10% { transform: translateY(0); }
-    14%, 58% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
-    64%, 100% { transform: translateY(0); }
+  .touche svg { width: .9em; height: .9em; display: block; }
+  /* Les touches s'enfoncent l'une après l'autre dans l'ordre du raccourci, restent
+     maintenues ensemble, puis se relâchent toutes au même instant (62%). Une keyframe
+     par rang ; le rang est porté par la classe .touche--N. */
+  .touche--2 { animation-name: enfonce2; }
+  .touche--3 { animation-name: enfonce3; }
+  @keyframes enfonce1 {
+    0%, 8% { transform: translateY(0); }
+    12%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
   }
-  /* Le L s'ajoute un instant plus tard ; les deux se relâchent ensemble à 58%. */
-  @keyframes enfonceL {
-    0%, 27% { transform: translateY(0); }
-    31%, 58% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
-    64%, 100% { transform: translateY(0); }
+  @keyframes enfonce2 {
+    0%, 22% { transform: translateY(0); }
+    26%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
+  }
+  @keyframes enfonce3 {
+    0%, 36% { transform: translateY(0); }
+    40%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
   }
   .plus {
     font-family: var(--display);
@@ -343,11 +350,11 @@
       <h1 id="titre">T'as oublié <span class="flash">Win + L</span></h1>
 
       <div class="touches" aria-hidden="true">
-        <div class="touche win">
+        <div class="touche touche--1 win">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.5 11 3.4v8.1H3zM13 3.1 21 2v9.5h-8zM3 12.5h8v8.1L3 19.5zM13 12.5h8V22l-8-1.1z"/></svg>
         </div>
         <div class="plus">+</div>
-        <div class="touche l">L</div>
+        <div class="touche touche--2 l">L</div>
       </div>
 
       <div class="chrono">
@@ -384,33 +391,86 @@
   function pad(n){ return String(n).padStart(2,'0'); }
   heure.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes());
 
+  // Raccourci selon le système. macOS a le sien ; Windows et tout système non
+  // reconnu retombent sur Win + L.
+  var LOGO_WIN  = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.5 11 3.4v8.1H3zM13 3.1 21 2v9.5h-8zM3 12.5h8v8.1L3 19.5zM13 12.5h8V22l-8-1.1z"/></svg>';
+  var LOGO_COMMAND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9h6v6H9z"/><path d="M9 9V6.5A2.5 2.5 0 1 0 6.5 9H9z"/><path d="M15 9V6.5A2.5 2.5 0 1 1 17.5 9H15z"/><path d="M9 15v2.5A2.5 2.5 0 1 1 6.5 15H9z"/><path d="M15 15v2.5a2.5 2.5 0 1 0 2.5-2.5H15z"/></svg>';
+  var LOGO_CONTROL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15.5 12 8.5l7 7"/></svg>';
+
+  var RACCOURCIS = {
+    windows: {
+      nom: 'Win + L',
+      onglet: 'WIN + L !!!',
+      nbTouches: 'Deux touches',
+      depuis: '2001',
+      indice: 'La touche Windows est en bas à gauche, le L à droite du K',
+      touches: [LOGO_WIN, 'L']
+    },
+    macos: {
+      nom: 'Command + Control + Q',
+      onglet: 'COMMAND + CONTROL + Q !!!',
+      nbTouches: 'Trois touches',
+      depuis: 'Mac OS X',
+      indice: 'Command borde la barre d\'espace, Control est à sa gauche, le Q en haut du clavier',
+      touches: [LOGO_COMMAND, LOGO_CONTROL, 'Q']
+    }
+  };
+  var plateforme = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '';
+  var raccourci = /mac/i.test(plateforme) ? RACCOURCIS.macos : RACCOURCIS.windows;
+
+  // Les textes portent des jetons plutôt que le raccourci en dur.
+  function perso(txt){
+    return txt
+      .replace(/\{RACCOURCI\}/g, raccourci.nom)
+      .replace(/\{NB_TOUCHES\}/g, raccourci.nbTouches)
+      .replace(/\{DEPUIS\}/g, raccourci.depuis)
+      .replace(/\{INDICE\}/g, raccourci.indice);
+  }
+
+  // Touches affichées : un rang par touche, séparées par un +.
+  (function(){
+    var boite = document.querySelector('.touches');
+    boite.innerHTML = '';
+    raccourci.touches.forEach(function(contenu, rang){
+      if (rang) {
+        var plus = document.createElement('div');
+        plus.className = 'plus'; plus.textContent = '+';
+        boite.append(plus);
+      }
+      var touche = document.createElement('div');
+      touche.className = 'touche touche--' + (rang + 1);
+      touche.innerHTML = contenu;
+      boite.append(touche);
+    });
+  })();
+
   // Titre aléatoire à chaque ouverture
   var titresH1 = [
-    ["T'as oublié ", "Win + L", ""],
-    ["", "Win + L", ", c'est pas optionnel"],
-    ["Session ouverte. ", "Win + L", " aussi ?"],
-    ["Ton PC était à tout le monde. ", "Win + L", ""],
-    ["Deux touches. ", "Win + L", ". C'était trop ?"],
-    ["Ta session t'attendait. ", "Win + L", " aussi."],
-    ["Merci pour l'accès. ", "Win + L", " la prochaine fois."],
-    ["", "Win + L", ". Répète après moi."],
-    ["Le clavier avait la réponse : ", "Win + L", ""],
-    ["Pas verrouillé. Pas sérieux. ", "Win + L", "."],
-    ["", "Win + L", " existe depuis 2001. Toi, tu découvres."],
-    ["Tout le monde a vu ton écran. ", "Win + L", "."],
-    ["", "Win + L", ", ça se tape avec une seule main."],
-    ["Ton PC dit merci de l'avoir laissé ouvert. ", "Win + L", "."],
-    ["Une session ouverte, c'est une invitation. ", "Win + L", "."],
-    ["", "Win + L", ", même la DSI le fait."],
-    ["Si t'avais fait ", "Win + L", " tu verrais pas ça."],
-    ["Le bureau te remercie. ", "Win + L", " la prochaine fois."],
+    ["T'as oublié ", "{RACCOURCI}", ""],
+    ["", "{RACCOURCI}", ", c'est pas optionnel"],
+    ["Session ouverte. ", "{RACCOURCI}", " aussi ?"],
+    ["Ton PC était à tout le monde. ", "{RACCOURCI}", ""],
+    ["{NB_TOUCHES}. ", "{RACCOURCI}", ". C'était trop ?"],
+    ["Ta session t'attendait. ", "{RACCOURCI}", " aussi."],
+    ["Merci pour l'accès. ", "{RACCOURCI}", " la prochaine fois."],
+    ["", "{RACCOURCI}", ". Répète après moi."],
+    ["Le clavier avait la réponse : ", "{RACCOURCI}", ""],
+    ["Pas verrouillé. Pas sérieux. ", "{RACCOURCI}", "."],
+    ["", "{RACCOURCI}", " existe depuis {DEPUIS}. Toi, tu découvres."],
+    ["Tout le monde a vu ton écran. ", "{RACCOURCI}", "."],
+    ["", "{RACCOURCI}", ", ça se tape avec une seule main."],
+    ["Ton PC dit merci de l'avoir laissé ouvert. ", "{RACCOURCI}", "."],
+    ["Une session ouverte, c'est une invitation. ", "{RACCOURCI}", "."],
+    ["", "{RACCOURCI}", ", même la DSI le fait."],
+    ["Si t'avais fait ", "{RACCOURCI}", " tu verrais pas ça."],
+    ["Le bureau te remercie. ", "{RACCOURCI}", " la prochaine fois."],
   ];
   var choix = titresH1[Math.floor(Math.random() * titresH1.length)];
   var h1 = document.getElementById('titre');
   h1.textContent = '';
-  h1.append(choix[0]);
-  var flash = document.createElement('span'); flash.className = 'flash'; flash.textContent = choix[1];
-  h1.append(flash, choix[2]);
+  h1.append(perso(choix[0]));
+  var flash = document.createElement('span'); flash.className = 'flash'; flash.textContent = perso(choix[1]);
+  h1.append(flash, perso(choix[2]));
 
   // 6. Piques qui tournent, aussi utilisées dans la bande défilante
   var piques = [
@@ -419,14 +479,14 @@
     "Le fond d'écran a fait l'unanimité contre lui",
     "Ton mot de passe est très bien, dommage qu'il serve à rien",
     "Le PC est en libre-service jusqu'à ton retour",
-    "Deux touches. Une seconde. Zéro croissants",
-    "Win + L ce n'est pas une option, c'est un réflexe",
+    "{NB_TOUCHES}. Une seconde. Zéro croissants",
+    "{RACCOURCI} ce n'est pas une option, c'est un réflexe",
     "Quelqu'un a peut-être changé ta langue de clavier",
     "Le poste appartient à celui qui passe dans le couloir",
     "Ta session, notre terrain de jeu",
     "Verrouiller, c'est gratuit et ça prend moins d'une seconde",
-    "La touche Windows est en bas à gauche, le L à droite du K",
-    "Win + L : la seule combinaison qui protège ta boîte mail",
+    "{INDICE}",
+    "{RACCOURCI} : la seule combinaison qui protège ta boîte mail",
     "Un poste ouvert, c'est un dossier RH posé sur la table",
     "Ton navigateur connaît tes recherches, nous aussi maintenant",
     "Une session ouverte, c'est une invitation acceptée",
@@ -447,7 +507,7 @@
     "Une réunion ne dure jamais aussi peu de temps que tu l'imagines"
   ];
   var piste = document.getElementById('piste');
-  var texte = piques.map(function(p){ return '<span>' + p + '</span>'; }).join('');
+  var texte = piques.map(function(p){ return '<span>' + perso(p) + '</span>'; }).join('');
   piste.innerHTML = texte + texte;   // doublé pour un défilement sans coupure
   // Vitesse constante de 80 px/s quelle que soit la longueur du texte
   function reglerBandeau(){
@@ -475,7 +535,7 @@
   ];
   var palierActuel = -1, timerPique = null, indexPique = Math.floor(Math.random() * piques.length);
   function afficherLigne(txt){
-    palier.textContent = txt;
+    palier.textContent = perso(txt);
     palier.classList.remove('change'); void palier.offsetWidth; palier.classList.add('change');
   }
   function relancerPiques(){
@@ -548,12 +608,12 @@
     // 5. Rapport d'incident
     var jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
     var numero = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + '-' + pad(n);
-    var poste = (navigator.platform || 'PC').replace(/win32/i, 'Windows') + ' \u00B7 ' + screen.width + '\u00D7' + screen.height;
+    var poste = (navigator.platform || 'PC').replace(/win32/i, 'Windows').replace(/macintel/i, 'macOS') + ' \u00B7 ' + screen.width + '\u00D7' + screen.height;
     document.getElementById('rapport').innerHTML =
       'Incident <b>n\u00B0 ' + numero + '</b><br>' +
       'Poste <b>' + poste + '</b><br>' +
       'Constaté <b>' + jours[d.getDay()] + ' à ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + '</b><br>' +
-      'Par <b>un collègue</b> \u00B7 Suite : <b>Win + L</b>';
+      'Par <b>un collègue</b> \u00B7 Suite : <b>' + raccourci.nom + '</b>';
 
     // 4. Date sur le mot laissé par la victime
     document.getElementById('postit-date').textContent =
@@ -566,7 +626,7 @@
   }, 10000);
 
   // Titre + icône d'onglet qui clignotent
-  var titres = ['⚠ POSTE NON VERROUILLÉ', 'WIN + L !!!', '⚠ SESSION OUVERTE'];
+  var titres = ['⚠ POSTE NON VERROUILLÉ', raccourci.onglet, '⚠ SESSION OUVERTE'];
   var icones = [
     "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='#ffd21f'/><path d='M16 4 3 28h26z' fill='#0b0a08'/><rect x='14.5' y='12' width='3' height='8' fill='#ffd21f'/><circle cx='16' cy='23.5' r='1.8' fill='#ffd21f'/></svg>"),
     "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='#e5261b'/><rect x='7' y='15' width='18' height='13' rx='2' fill='#fbf6e6'/><path d='M19 15v-5a5 5 0 0 1 10 0v2' fill='none' stroke='#fbf6e6' stroke-width='3'/></svg>")
