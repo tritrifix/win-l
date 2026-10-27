@@ -1,0 +1,328 @@
+:root {
+    --noir: #0b0a08;
+    --fond: var(--noir);
+    --jaune: #ffd21f;
+    --bande: var(--jaune);
+    --rouge: #e5261b;
+    --blanc: #fbf6e6;
+    --gris: #b9b2a0;
+    --display: "Anton", "Impact", "Arial Narrow", sans-serif;
+    --mono: "IBM Plex Mono", "Consolas", "Courier New", monospace;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--fond);
+    color: var(--blanc);
+    font-family: var(--mono);
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    transition: background 2s linear;
+  }
+  html.sans-curseur, html.sans-curseur * { cursor: none !important; }
+
+  /* 11. Allumage façon tube cathodique */
+  #ecran {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transform-origin: 50% 50%;
+    animation: allumage 1.1s cubic-bezier(.2,.8,.3,1) both;
+  }
+  @keyframes allumage {
+    0%   { transform: scale(0, .002); filter: brightness(6); }
+    30%  { transform: scale(1.04, .004); filter: brightness(5); }
+    55%  { transform: scale(1.02, 1.03); filter: brightness(2.2); }
+    65%  { transform: scale(1, 1) translate(4px, 0); filter: brightness(1.4); }
+    75%  { transform: translate(-3px, 1px); filter: brightness(1.1); }
+    85%  { transform: translate(2px, -1px); filter: brightness(1.3); }
+    100% { transform: none; filter: none; }
+  }
+
+  .stripe {
+    flex: 0 0 clamp(28px, 6vh, 64px);
+    background: repeating-linear-gradient(-45deg, var(--bande) 0 40px, var(--noir) 40px 80px);
+    background-size: 113px 113px;
+    animation: defile 1.2s linear infinite;
+  }
+  .stripe.bas { animation-direction: reverse; }
+  @keyframes defile { to { background-position: 113px 0; } }
+  body.alarme .stripe { animation-duration: .3s; }
+
+  main {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    place-items: center;
+    padding: 1.5vh 16px;
+    text-align: center;
+    position: relative;
+  }
+  main { animation: secousse .8s steps(2) infinite; }
+  @keyframes secousse {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-8px, 4px) rotate(-.4deg); }
+    50% { transform: translate(6px, -5px) rotate(.4deg); }
+    75% { transform: translate(-5px, -3px) rotate(-.2deg); }
+    100% { transform: translate(7px, 5px) rotate(.3deg); }
+  }
+
+  .contenu {
+    display: grid;
+    gap: clamp(8px, 2.2vh, 24px);
+    justify-items: center;
+    max-width: 1100px;
+    width: 100%;
+  }
+  .etiquette {
+    font-size: clamp(10px, min(1.2vw, 1.8vh), 14px);
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--jaune);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-weight: 600;
+  }
+  .etiquette::before, .etiquette::after {
+    content: ""; width: 60px; height: 2px; background: var(--jaune);
+  }
+  .voyant {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--rouge);
+    box-shadow: 0 0 0 3px var(--noir), 0 0 0 5px var(--rouge), 0 0 22px var(--rouge);
+    animation: clignote .9s steps(1) infinite;
+  }
+  @keyframes clignote { 50% { opacity: .15; box-shadow: 0 0 0 3px var(--noir), 0 0 0 5px var(--rouge); } }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    margin: 0;
+    line-height: .92;
+    font-size: clamp(34px, min(8vw, 10.5vh), 120px);
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    text-wrap: balance;
+    max-width: 14ch;
+    color: var(--blanc);
+  }
+  h1 .flash {
+    display: inline-block;
+    padding: 0 .14em;
+    background: var(--jaune);
+    color: var(--noir);
+    animation: alterne 1s steps(1) infinite;
+  }
+  @keyframes alterne { 50% { background: var(--rouge); color: var(--blanc); } }
+
+  .touches {
+    display: flex; align-items: center; gap: clamp(10px, 2vw, 28px);
+    margin-block: .5vh;
+  }
+  .touche {
+    font-family: var(--display);
+    font-size: clamp(30px, min(6vw, 7vh), 88px);
+    line-height: 1;
+    min-width: 1.5em;
+    padding: .28em .32em .34em;
+    background: linear-gradient(#f4ecd6, #d8cfb5);
+    color: var(--noir);
+    border-radius: .1em;
+    box-shadow: 0 .16em 0 #7d7462, 0 .3em 0 #3a3630, 0 .5em 1.4em rgba(0,0,0,.6);
+    display: grid; place-items: center;
+    animation: enfonce1 2.8s ease-in-out infinite;
+  }
+  .touche svg { width: .9em; height: .9em; display: block; }
+  /* Les touches s'enfoncent l'une après l'autre dans l'ordre du raccourci, restent
+     maintenues ensemble, puis se relâchent toutes au même instant (62%). Une keyframe
+     par rang ; le rang est porté par la classe .touche--N. */
+  .touche--2 { animation-name: enfonce2; }
+  .touche--3 { animation-name: enfonce3; }
+  @keyframes enfonce1 {
+    0%, 8% { transform: translateY(0); }
+    12%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
+  }
+  @keyframes enfonce2 {
+    0%, 22% { transform: translateY(0); }
+    26%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
+  }
+  @keyframes enfonce3 {
+    0%, 36% { transform: translateY(0); }
+    40%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
+  }
+  .plus {
+    font-family: var(--display);
+    font-size: clamp(28px, min(5vw, 6vh), 72px);
+    color: var(--jaune);
+  }
+
+  .chrono {
+    font-size: clamp(13px, min(1.6vw, 2.2vh), 20px);
+    display: grid; gap: 6px;
+  }
+  .chrono b {
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(30px, min(5vw, 6.5vh), 64px);
+    font-weight: 600;
+    color: var(--jaune);
+    line-height: 1;
+    letter-spacing: .04em;
+  }
+  .chrono small { color: var(--gris); }
+  .chrono #palier {
+    color: var(--blanc);
+    font-weight: 600;
+    min-height: 1.4em;
+  }
+  .chrono #palier.change { animation: apparait .5s ease-out; }
+  @keyframes apparait { from { opacity: 0; transform: translateY(6px); } }
+
+  /* 10. Bande défilante au-dessus des rayures du bas */
+  .bandeau {
+    flex: 0 0 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 2px solid var(--bande);
+    border-bottom: 2px solid var(--bande);
+    background: var(--noir);
+    font-family: var(--display);
+    font-size: clamp(16px, min(2.2vw, 3.2vh), 30px);
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--bande);
+  }
+  .bandeau .piste {
+    display: inline-block;
+    padding-left: 0;
+    animation: defileTexte var(--duree-bandeau, 40s) linear infinite;
+  }
+  .bandeau .piste span { display: inline-block; padding-right: 3em; }
+  .bandeau .piste span::after { content: "\25C6"; color: var(--rouge); margin-left: 3em; font-size: .7em; vertical-align: .12em; }
+  @keyframes defileTexte { to { transform: translateX(-50%); } }
+  body.alarme .bandeau .piste { animation-duration: calc(var(--duree-bandeau, 40s) / 3); }
+
+  /* 9. Scanlines et grain */
+  .scanlines {
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px);
+    mix-blend-mode: multiply;
+  }
+  .grain {
+    position: fixed; inset: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 6;
+    opacity: .09;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain .5s steps(6) infinite;
+  }
+  @keyframes grain {
+    0% { transform: translate(0,0); } 20% { transform: translate(-3%, 2%); } 40% { transform: translate(2%, -4%); }
+    60% { transform: translate(-4%, -1%); } 80% { transform: translate(3%, 3%); } 100% { transform: translate(0,0); }
+  }
+
+  /* 9. Glitch sur le titre */
+  h1.glitch {
+    animation: glitch .16s steps(2) 1;
+  }
+  @keyframes glitch {
+    0%   { text-shadow: -4px 0 #00e5ff, 4px 0 #ff2a2a; transform: translate(2px, 0) skewX(-3deg); clip-path: inset(10% 0 40% 0); }
+    50%  { text-shadow: 4px 0 #00e5ff, -4px 0 #ff2a2a; transform: translate(-3px, 1px) skewX(2deg); clip-path: inset(45% 0 5% 0); }
+    100% { text-shadow: none; transform: none; clip-path: none; }
+  }
+
+  /* 10. Chrono facon afficheur d'aeroport */
+  .chrono b { display: inline-flex; gap: .06em; justify-content: center; perspective: 600px; }
+  .chrono b .chiffre {
+    display: inline-block;
+    position: relative;
+    min-width: .72em;
+    padding: .04em .02em;
+    background: #1a1712;
+    border-radius: .06em;
+    box-shadow: inset 0 0 0 1px #2c2820;
+  }
+  .chrono b .chiffre::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px;
+    background: var(--noir); opacity: .9;
+  }
+  .chrono b .sep { display: inline-block; min-width: .35em; }
+  .chrono b .chiffre.bascule { animation: bascule .32s ease-in; }
+  @keyframes bascule {
+    0%   { transform: rotateX(90deg); filter: brightness(.4); }
+    60%  { transform: rotateX(-12deg); filter: brightness(1.2); }
+    100% { transform: none; filter: none; }
+  }
+
+  /* 12. Fond qui pulse au rythme du voyant */
+  .pulse {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background: radial-gradient(ellipse at center, rgba(229,38,27,.28), rgba(229,38,27,0) 70%);
+    animation: pulse .9s steps(1) infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0; } }
+  #ecran { position: relative; z-index: 2; }
+
+  /* 5. Rapport d'incident */
+  .rapport {
+    position: absolute;
+    left: clamp(10px, 3vw, 56px);
+    bottom: clamp(10px, 3vh, 36px);
+    text-align: left;
+    font-size: clamp(9px, min(.9vw, 1.4vh), 12px);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gris);
+    line-height: 1.7;
+    border-left: 3px solid var(--rouge);
+    padding-left: 12px;
+  }
+  .rapport b { color: var(--blanc); font-weight: 600; }
+
+  /* 4. Mot laisse par la victime, apparait apres 2 minutes */
+  .postit {
+    position: absolute;
+    right: clamp(10px, 3vw, 56px);
+    top: clamp(10px, 3vh, 36px);
+    width: clamp(180px, 18vw, 260px);
+    padding: 16px 18px 20px;
+    background: #ffe66a;
+    color: #2a2410;
+    font-size: clamp(11px, min(1.1vw, 1.7vh), 14px);
+    line-height: 1.45;
+    text-align: left;
+    box-shadow: 0 10px 24px rgba(0,0,0,.55);
+    transform: rotate(-3deg) translateY(-140%);
+    opacity: 0;
+    transition: transform .7s cubic-bezier(.2,1.4,.4,1), opacity .4s;
+  }
+  .postit.visible { transform: rotate(-3deg) translateY(0); opacity: 1; }
+  .postit::before {
+    content: ""; position: absolute; left: 50%; top: -10px; width: 70px; height: 20px;
+    background: rgba(255,255,255,.45); transform: translateX(-50%) rotate(2deg);
+  }
+  .postit small { display: block; margin-top: 10px; font-size: .85em; opacity: .7; }
+  .postit em { font-style: normal; text-decoration: underline; }
+
+  /* 4. Flash quand la victime revient */
+  .retour {
+    position: fixed; inset: 0; z-index: 10; pointer-events: none;
+    display: grid; place-items: center;
+    background: var(--blanc);
+    color: var(--noir);
+    font-family: var(--display);
+    font-size: clamp(40px, min(9vw, 14vh), 140px);
+    text-transform: uppercase;
+    opacity: 0;
+  }
+  .retour.actif { animation: flashRetour 1.6s ease-out forwards; }
+  @keyframes flashRetour {
+    0% { opacity: 1; } 12% { opacity: 1; } 30% { opacity: .92; } 100% { opacity: 0; }
+  }
+
+  @media (max-width: 900px) {
+    .etiquette::before, .etiquette::after { width: 24px; }
+    .rapport, .postit { display: none; }
+  }
