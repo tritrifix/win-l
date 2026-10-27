@@ -13,7 +13,7 @@ Le but est la sensibilisation à la sécurité, sur le ton de l'humour : rien n'
 | Élément | Comportement |
 | --- | --- |
 | **Titre** | Choisi au hasard parmi une vingtaine de variantes à chaque ouverture (« T'as oublié Win + L », « Deux touches. Win + L. C'était trop ? »…). |
-| **Raccourci selon le système** | Sur macOS la page affiche `Cmd + Ctrl + Q` avec les logos ⌘ et ⌃ ; partout ailleurs, `Win + L`. Les touches s'enfoncent l'une après l'autre, restent maintenues ensemble, puis se relâchent au même instant. |
+| **Raccourci selon le système** | Sur macOS la page affiche `Command + Control + Q` avec les logos ⌘ et ⌃ ; partout ailleurs, `Win + L`. Les touches s'enfoncent l'une après l'autre, restent maintenues ensemble, puis se relâchent au même instant. |
 | **Chronomètre** | Façon afficheur d'aéroport, il compte le temps écoulé depuis l'ouverture de la page. |
 | **Paliers** | Le message sous le chrono s'aggrave avec le temps : 30 s, 1 min, 5 min, 10 min… jusqu'à 3 h. |
 | **Fond qui rougit** | Le fond vire progressivement au rouge sombre en 10 minutes ; les rayures passent du jaune à l'orange puis au rouge. |
@@ -73,7 +73,7 @@ N'écris pas le raccourci en dur dans les textes : utilise les jetons, résolus 
 
 | Jeton | Windows | macOS |
 | --- | --- | --- |
-| `{RACCOURCI}` | Win + L | Cmd + Ctrl + Q |
+| `{RACCOURCI}` | Win + L | Command + Control + Q |
 | `{NB_TOUCHES}` | Deux touches | Trois touches |
 | `{DEPUIS}` | 2001 | Mac OS X |
 | `{INDICE}` | position des touches sur un clavier PC | position des touches sur un clavier Mac |
@@ -86,4 +86,4 @@ Tout le décor est marqué `aria-hidden="true"` — bandeaux rayés, voyant, tou
 
 ---
 
-*Et pour ne jamais voir cette page : `Win + L` sous Windows, `Cmd + Ctrl + Q` sous macOS.*
+*Et pour ne jamais voir cette page : `Win + L` sous Windows, `Command + Control + Q` sous macOS.*

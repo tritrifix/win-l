@@ -394,8 +394,8 @@
   // Raccourci selon le système. macOS a le sien ; Windows et tout système non
   // reconnu retombent sur Win + L.
   var LOGO_WIN  = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.5 11 3.4v8.1H3zM13 3.1 21 2v9.5h-8zM3 12.5h8v8.1L3 19.5zM13 12.5h8V22l-8-1.1z"/></svg>';
-  var LOGO_CMD  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9h6v6H9z"/><path d="M9 9V6.5A2.5 2.5 0 1 0 6.5 9H9z"/><path d="M15 9V6.5A2.5 2.5 0 1 1 17.5 9H15z"/><path d="M9 15v2.5A2.5 2.5 0 1 1 6.5 15H9z"/><path d="M15 15v2.5a2.5 2.5 0 1 0 2.5-2.5H15z"/></svg>';
-  var LOGO_CTRL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15.5 12 8.5l7 7"/></svg>';
+  var LOGO_COMMAND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9h6v6H9z"/><path d="M9 9V6.5A2.5 2.5 0 1 0 6.5 9H9z"/><path d="M15 9V6.5A2.5 2.5 0 1 1 17.5 9H15z"/><path d="M9 15v2.5A2.5 2.5 0 1 1 6.5 15H9z"/><path d="M15 15v2.5a2.5 2.5 0 1 0 2.5-2.5H15z"/></svg>';
+  var LOGO_CONTROL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15.5 12 8.5l7 7"/></svg>';
 
   var RACCOURCIS = {
     windows: {
@@ -403,22 +403,22 @@
       onglet: 'WIN + L !!!',
       nbTouches: 'Deux touches',
       depuis: '2001',
-      indice: 'La touche Windows est en bas \u00e0 gauche, le L \u00e0 droite du K',
+      indice: 'La touche Windows est en bas à gauche, le L à droite du K',
       touches: [LOGO_WIN, 'L']
     },
     macos: {
-      nom: 'Cmd + Ctrl + Q',
-      onglet: 'CMD + CTRL + Q !!!',
+      nom: 'Command + Control + Q',
+      onglet: 'COMMAND + CONTROL + Q !!!',
       nbTouches: 'Trois touches',
       depuis: 'Mac OS X',
-      indice: 'Cmd borde la barre d\'espace, Ctrl est \u00e0 sa gauche, le Q en haut du clavier',
-      touches: [LOGO_CMD, LOGO_CTRL, 'Q']
+      indice: 'Command borde la barre d\'espace, Control est à sa gauche, le Q en haut du clavier',
+      touches: [LOGO_COMMAND, LOGO_CONTROL, 'Q']
     }
   };
   var plateforme = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '';
   var raccourci = /mac/i.test(plateforme) ? RACCOURCIS.macos : RACCOURCIS.windows;
 
-  // Les textes portent des jetons plut\u00f4t que le raccourci en dur.
+  // Les textes portent des jetons plutôt que le raccourci en dur.
   function perso(txt){
     return txt
       .replace(/\{RACCOURCI\}/g, raccourci.nom)
@@ -427,7 +427,7 @@
       .replace(/\{INDICE\}/g, raccourci.indice);
   }
 
-  // Touches affich\u00e9es : un rang par touche, s\u00e9par\u00e9es par un +.
+  // Touches affichées : un rang par touche, séparées par un +.
   (function(){
     var boite = document.querySelector('.touches');
     boite.innerHTML = '';
