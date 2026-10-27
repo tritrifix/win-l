@@ -143,21 +143,28 @@
     border-radius: .1em;
     box-shadow: 0 .16em 0 #7d7462, 0 .3em 0 #3a3630, 0 .5em 1.4em rgba(0,0,0,.6);
     display: grid; place-items: center;
-    animation: enfonceWin 2.8s ease-in-out infinite;
+    animation: enfonce1 2.8s ease-in-out infinite;
   }
-  .touche.win svg { width: .9em; height: .9em; display: block; }
-  .touche.l { animation-name: enfonceL; }
-  /* Windows s'enfonce la première et reste maintenue. */
-  @keyframes enfonceWin {
-    0%, 10% { transform: translateY(0); }
-    14%, 58% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
-    64%, 100% { transform: translateY(0); }
+  .touche svg { width: .9em; height: .9em; display: block; }
+  /* Les touches s'enfoncent l'une après l'autre dans l'ordre du raccourci, restent
+     maintenues ensemble, puis se relâchent toutes au même instant (62%). Une keyframe
+     par rang ; le rang est porté par la classe .touche--N. */
+  .touche--2 { animation-name: enfonce2; }
+  .touche--3 { animation-name: enfonce3; }
+  @keyframes enfonce1 {
+    0%, 8% { transform: translateY(0); }
+    12%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
   }
-  /* Le L s'ajoute un instant plus tard ; les deux se relâchent ensemble à 58%. */
-  @keyframes enfonceL {
-    0%, 27% { transform: translateY(0); }
-    31%, 58% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
-    64%, 100% { transform: translateY(0); }
+  @keyframes enfonce2 {
+    0%, 22% { transform: translateY(0); }
+    26%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
+  }
+  @keyframes enfonce3 {
+    0%, 36% { transform: translateY(0); }
+    40%, 62% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    68%, 100% { transform: translateY(0); }
   }
   .plus {
     font-family: var(--display);
@@ -343,11 +350,11 @@
       <h1 id="titre">T'as oublié <span class="flash">Win + L</span></h1>
 
       <div class="touches" aria-hidden="true">
-        <div class="touche win">
+        <div class="touche touche--1 win">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.5 11 3.4v8.1H3zM13 3.1 21 2v9.5h-8zM3 12.5h8v8.1L3 19.5zM13 12.5h8V22l-8-1.1z"/></svg>
         </div>
         <div class="plus">+</div>
-        <div class="touche l">L</div>
+        <div class="touche touche--2 l">L</div>
       </div>
 
       <div class="chrono">
