@@ -23,7 +23,7 @@
   html.sans-curseur, html.sans-curseur * { cursor: none !important; }
 
   /* 11. Allumage façon tube cathodique */
-  #ecran {
+  .ecran {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -173,12 +173,12 @@
     letter-spacing: .04em;
   }
   .chrono small { color: var(--gris); }
-  .chrono #palier {
+  .chrono .palier {
     color: var(--blanc);
     font-weight: 600;
     min-height: 1.4em;
   }
-  .chrono #palier.change { animation: apparait .5s ease-out; }
+  .chrono .palier.change { animation: apparait .5s ease-out; }
   @keyframes apparait { from { opacity: 0; transform: translateY(6px); } }
 
   /* 10. Bande défilante au-dessus des rayures du bas */
@@ -263,7 +263,7 @@
     animation: pulse .9s steps(1) infinite;
   }
   @keyframes pulse { 50% { opacity: 0; } }
-  #ecran { position: relative; z-index: 2; }
+  .ecran { position: relative; z-index: 2; }
 
   /* 5. Rapport d'incident */
   .rapport {

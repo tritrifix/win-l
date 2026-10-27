@@ -3,6 +3,7 @@
   'use strict';
 
   var M = window.WINL_MESSAGES;
+  var D = window.WINL_DOM, el = D.el, rejouer = D.rejouer;
 
   // --- Système -------------------------------------------------------------
   // Un seul endroit lit le système, pour le choix du raccourci comme pour le
@@ -38,11 +39,10 @@
     });
   }
 
-  // --- Raccourcis d'accès au DOM -------------------------------------------
-  function $(id){ return document.getElementById(id); }
-  var compteur = $('compteur'), heure = $('heure'), palier = $('palier');
-  var postit = $('postit'), piste = $('piste'), retour = $('retour');
-  var h1 = $('titre'), favicon = $('favicon');
+  // --- Éléments, par rôle déclaré dans le markup (voir dom.js) --------------
+  var compteur = el.compteur, heure = el.heure, palier = el.palier;
+  var postit = el.postit, piste = el.piste, retour = el.retour;
+  var h1 = el.titre, favicon = el.favicon;
 
   var debut = Date.now();
   var d = new Date();
@@ -58,7 +58,7 @@
     control: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15.5 12 8.5l7 7"/></svg>'
   };
   (function(){
-    var boite = document.querySelector('.touches');
+    var boite = el.touches;
     boite.innerHTML = '';
     raccourci.touches.forEach(function(nom, rang){
       if (rang) {
@@ -103,7 +103,7 @@
   var indexPique = Math.floor(Math.random() * M.piques.length);
   function afficherLigne(txt){
     palier.textContent = perso(txt);
-    palier.classList.remove('change'); void palier.offsetWidth; palier.classList.add('change');
+    rejouer(palier, 'change');
   }
   function relancerPiques(){
     clearInterval(timerPique);
@@ -150,7 +150,7 @@
         if (txt[c2] !== affichage[c2]) {
           var cell = compteur.children[c2];
           cell.textContent = txt[c2];
-          cell.classList.remove('bascule'); void cell.offsetWidth; cell.classList.add('bascule');
+          rejouer(cell, 'bascule');
         }
       }
     }
@@ -190,18 +190,18 @@
       '{JOUR}':  M.rapport.jours[d.getDay()],
       '{HEURE}': hhmm(d)
     };
-    $('rapport').innerHTML = M.rapport.lignes.map(function(l){
+    el.rapport.innerHTML = M.rapport.lignes.map(function(l){
       return perso(l).replace(/\{[A-Z_]+\}/g, function(j){ return j in valeurs ? valeurs[j] : j; });
     }).join('<br>');
 
-    $('postit-date').textContent = M.postitDate
+    el.postitDate.textContent = M.postitDate
       .replace('{DATE}', pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear())
       .replace('{HEURE}', hhmm(d));
   })();
 
   // --- Glitch sur le titre toutes les 10 secondes ---------------------------
   setInterval(function(){
-    h1.classList.remove('glitch'); void h1.offsetWidth; h1.classList.add('glitch');
+    rejouer(h1, 'glitch');
   }, 10000);
 
   // --- Titre et favicon qui clignotent --------------------------------------
@@ -248,7 +248,7 @@
   function gesteReel(){
     var maintenant = Date.now();
     if (maintenant - dernierGeste >= SEUIL_MS) {
-      retour.classList.remove('actif'); void retour.offsetWidth; retour.classList.add('actif');
+      rejouer(retour, 'actif');
     }
     dernierGeste = maintenant;
   }

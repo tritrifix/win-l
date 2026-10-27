@@ -3,20 +3,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WIN + L</title>
-<link id="favicon" rel="icon" href="">
+<link data-role="favicon" rel="icon" href="">
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/style.css">
 
-<div id="ecran">
+<div class="ecran" data-role="ecran">
   <div class="stripe" aria-hidden="true"></div>
 
   <main>
     <div class="contenu">
       <div class="etiquette"><span class="voyant" aria-hidden="true"></span> Poste non verrouillé</div>
 
-      <h1 id="titre">T'as oublié <span class="flash">Win + L</span></h1>
+      <h1 data-role="titre">T'as oublié <span class="flash">Win + L</span></h1>
 
-      <div class="touches" aria-hidden="true">
+      <div class="touches" data-role="touches" aria-hidden="true">
         <div class="touche touche--1 win">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4.5 11 3.4v8.1H3zM13 3.1 21 2v9.5h-8zM3 12.5h8v8.1L3 19.5zM13 12.5h8V22l-8-1.1z"/></svg>
         </div>
@@ -26,28 +26,29 @@
 
       <div class="chrono">
         <small>Écran ouvert à tout le bureau depuis</small>
-        <b id="compteur">00:00</b>
-        <small id="palier"></small>
-        <small>Ouvert le <span id="heure">--:--</span></small>
+        <b data-role="compteur">00:00</b>
+        <small class="palier" data-role="palier"></small>
+        <small>Ouvert le <span data-role="heure">--:--</span></small>
       </div>
     </div>
 
-    <div class="rapport" id="rapport" aria-hidden="true"></div>
-    <div class="postit" id="postit" aria-hidden="true">
+    <div class="rapport" data-role="rapport" aria-hidden="true"></div>
+    <div class="postit" data-role="postit" aria-hidden="true">
       Message laissé par toi-même :<br>
       « Je verrouille la prochaine fois, <em>promis</em>. »
-      <small id="postit-date"></small>
+      <small data-role="postitDate"></small>
     </div>
   </main>
 
-  <div class="bandeau" aria-hidden="true"><div class="piste" id="piste"></div></div>
+  <div class="bandeau" aria-hidden="true"><div class="piste" data-role="piste"></div></div>
   <div class="stripe bas" aria-hidden="true"></div>
 </div>
 
 <div class="pulse" aria-hidden="true"></div>
 <div class="scanlines" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
-<div class="retour" id="retour" aria-hidden="true">Ah, te voilà.</div>
+<div class="retour" data-role="retour" aria-hidden="true">Ah, te voilà.</div>
 
 <script src="assets/messages.js"></script>
+<script src="assets/dom.js"></script>
 <script src="assets/app.js"></script>

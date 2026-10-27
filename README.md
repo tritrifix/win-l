@@ -56,6 +56,7 @@ docker compose down   # pour l'arrêter
 ├── index.html            # le markup seul
 ├── assets/
 │   ├── messages.js       # tous les textes : raccourcis, titres, piques, paliers
+│   ├── dom.js            # la frontière markup / logique : rôles data-role
 │   ├── app.js            # la logique
 │   ├── style.css         # la feuille de style
 │   ├── fonts.css         # les trois @font-face
@@ -77,6 +78,18 @@ Les textes sont tous dans `assets/messages.js`, séparés de la logique et du ma
 - **Couleurs** : variables CSS dans `:root`, au début d'`assets/style.css` (`--jaune`, `--rouge`, `--noir`…).
 
 Les libellés fixes de la page — l'étiquette « Poste non verrouillé », le texte du post-it, « Ah, te voilà. » — restent dans `index.html` : ils n'y sont écrits qu'une fois, les dupliquer dans `messages.js` ne ferait que créer deux vérités à maintenir.
+
+### Déplacer ou renommer un élément de la page
+
+`app.js` ne connaît aucun identifiant : il demande un **rôle**. Le markup déclare le sien avec `data-role`, et `assets/dom.js` est le seul fichier à relier les deux.
+
+```html
+<b data-role="compteur">00:00</b>
+```
+
+Pour déplacer le chronomètre ailleurs dans la page, emporte son `data-role` avec lui : rien d'autre à changer. Pour ajouter un élément piloté par le script, ajoute son rôle à la liste `ROLES` de `dom.js`. Un rôle déclaré mais absent du markup est signalé dans la console au chargement, au lieu de casser plus loin sur un `null`.
+
+Les classes CSS (`.ecran`, `.palier`, `.touche`…) restent le point de contact entre `index.html` et `style.css` ; la page n'utilise plus aucun `id`.
 
 N'écris pas le raccourci en dur dans les textes : utilise les jetons, résolus au chargement selon le système.
 
