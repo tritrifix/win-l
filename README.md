@@ -69,7 +69,7 @@ Tout se règle dans `index.html` :
 
 ## Accessibilité
 
-Les animations sont désactivées quand le système demande de réduire les mouvements (`prefers-reduced-motion`). Sous 900 px de large, le rapport d'incident et le post-it sont masqués pour garder l'essentiel lisible.
+Tout le décor est marqué `aria-hidden="true"` — bandeaux rayés, voyant, touches, rapport d'incident, post-it, halo et scanlines : un lecteur d'écran ne restitue que le titre et le message, pas l'habillage. Sous 900 px de large, le rapport d'incident et le post-it sont masqués pour garder l'essentiel lisible.
 
 ---
 
