@@ -71,9 +71,12 @@
   }
 
   .contenu {
-    /* Réduit par ajusterEchelle() dans app.js tant que le bloc dépasse de main :
-       un titre long doit rétrécir, pas déborder. */
+    /* Réduites par ajusterEchelle() dans app.js tant que le bloc dépasse de main.
+       --echelle-titre ne touche que le h1 : c'est lui qui encaisse en premier, pour
+       que le chronomètre et la ligne sous le chrono gardent leur taille.
+       --echelle s'applique à tout le bloc, en dernier recours. */
     --echelle: 1;
+    --echelle-titre: 1;
     display: grid;
     gap: calc(clamp(8px, 2.2vh, 24px) * var(--echelle));
     justify-items: center;
@@ -105,7 +108,7 @@
     font-weight: 400;
     margin: 0;
     line-height: .92;
-    font-size: calc(clamp(34px, min(8vw, 10.5vh), 120px) * var(--echelle, 1));
+    font-size: calc(clamp(34px, min(8vw, 10.5vh), 120px) * var(--echelle-titre, 1) * var(--echelle, 1));
     text-transform: uppercase;
     letter-spacing: .01em;
     text-wrap: balance;

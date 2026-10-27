@@ -81,19 +81,41 @@
   // commun au titre, aux touches et au chrono. Un message plus long qu'un autre
   // rétrécit au lieu de pousser le chronomètre sous le bandeau défilant.
   var ECHELLE_MIN = 0.38, PAS = 0.94, MARGE_SECOUSSE = 8;
+  // Part de la hauteur disponible que le titre ne doit pas dépasser, pour que
+  // le chronomètre et la ligne en dessous restent visibles et lisibles.
+  var PART_TITRE = 0.55, TITRE_MIN = 0.35;
+  // On mesure avec offsetHeight / clientHeight, jamais getBoundingClientRect :
+  // .ecran joue l'animation d'allumage (scale(0, .002) au départ) et main la
+  // secousse. getBoundingClientRect renvoie la taille APRÈS transformation, donc
+  // au chargement elle vaut un ou deux pixels et l'ajustement ne corrige rien.
+  // offsetHeight donne la hauteur de mise en page, insensible aux transforms.
   function hauteurDisponible(){
-    // clientHeight inclut le padding : la place réelle pour .contenu, c'est la
-    // boîte de contenu. La marge couvre l'amplitude de la secousse de main, qui
-    // oscille alors que le bandeau, lui, ne bouge pas.
     var cs = getComputedStyle(scene);
     return scene.clientHeight
          - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)
          - MARGE_SECOUSSE;
   }
   function ajusterEchelle(){
-    var e = 1, dispo = hauteurDisponible();
-    contenu.style.setProperty('--echelle', e);
-    for (var i = 0; i < 24 && contenu.getBoundingClientRect().height > dispo && e > ECHELLE_MIN; i++) {
+    var dispo = hauteurDisponible();
+    contenu.style.setProperty('--echelle', 1);
+    contenu.style.setProperty('--echelle-titre', 1);
+
+    // 1. Le titre encaisse seul. Deux raisons de le réduire : le bloc entier
+    //    dépasse, ou le titre à lui seul mange plus que sa part de la hauteur —
+    //    sans ce second critère, un titre très long peut « tenir » tout en
+    //    repoussant le chronomètre et sa ligne de message hors de vue.
+    var t = 1;
+    for (var i = 0; i < 30 && t > TITRE_MIN; i++) {
+      var blocTropHaut  = contenu.offsetHeight > dispo;
+      var titreTropHaut = h1.offsetHeight > dispo * PART_TITRE;
+      if (!blocTropHaut && !titreTropHaut) break;
+      t *= PAS;
+      contenu.style.setProperty('--echelle-titre', t);
+    }
+
+    // 2. Si le titre seul n'y suffit pas, tout le bloc rétrécit.
+    var e = 1;
+    for (var j = 0; j < 24 && contenu.offsetHeight > dispo && e > ECHELLE_MIN; j++) {
       e *= PAS;
       contenu.style.setProperty('--echelle', e);
     }
