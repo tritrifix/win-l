@@ -143,13 +143,21 @@
     border-radius: .1em;
     box-shadow: 0 .16em 0 #7d7462, 0 .3em 0 #3a3630, 0 .5em 1.4em rgba(0,0,0,.6);
     display: grid; place-items: center;
-    animation: enfonce 1.6s ease-in-out infinite;
+    animation: enfonceWin 2.8s ease-in-out infinite;
   }
   .touche.win svg { width: .9em; height: .9em; display: block; }
-  .touche.l { animation-delay: .25s; }
-  @keyframes enfonce {
-    0%, 70%, 100% { transform: translateY(0); }
-    80% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+  .touche.l { animation-name: enfonceL; }
+  /* Windows s'enfonce la première et reste maintenue. */
+  @keyframes enfonceWin {
+    0%, 10% { transform: translateY(0); }
+    14%, 58% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    64%, 100% { transform: translateY(0); }
+  }
+  /* Le L s'ajoute un instant plus tard ; les deux se relâchent ensemble à 58%. */
+  @keyframes enfonceL {
+    0%, 27% { transform: translateY(0); }
+    31%, 58% { transform: translateY(.14em); box-shadow: 0 .04em 0 #7d7462, 0 .1em 0 #3a3630, 0 .2em .5em rgba(0,0,0,.6); }
+    64%, 100% { transform: translateY(0); }
   }
   .plus {
     font-family: var(--display);
