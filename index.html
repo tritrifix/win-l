@@ -322,11 +322,6 @@
     .etiquette::before, .etiquette::after { width: 24px; }
     .rapport, .postit { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .stripe, .voyant, h1 .flash, .touche, main, #ecran, .grain, .bandeau .piste, .pulse, h1.glitch, .chrono b .chiffre.bascule { animation: none; }
-    h1 .flash { background: var(--jaune); color: var(--noir); }
-    .bandeau .piste { transform: none; }
-  }
 </style>
 
 <div id="ecran">
@@ -400,7 +395,6 @@
     ["", "Win + L", ", même la DSI le fait."],
     ["Si t'avais fait ", "Win + L", " tu verrais pas ça."],
     ["Le bureau te remercie. ", "Win + L", " la prochaine fois."],
-    ["Ta boîte mail était en libre accès. ", "Win + L", "."],
   ];
   var choix = titresH1[Math.floor(Math.random() * titresH1.length)];
   var h1 = document.getElementById('titre');
