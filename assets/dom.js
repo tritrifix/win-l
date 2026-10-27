@@ -10,7 +10,7 @@ window.WINL_DOM = (function(){
   // Rôles attendus dans index.html. Un rôle absent est signalé au chargement
   // plutôt que de casser plus tard sur un null.
   var ROLES = [
-    'ecran', 'titre', 'touches', 'compteur', 'palier', 'heure',
+    'ecran', 'scene', 'contenu', 'titre', 'touches', 'compteur', 'palier', 'heure',
     'rapport', 'postit', 'postitDate', 'piste', 'retour', 'favicon'
   ];
 

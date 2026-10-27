@@ -40,6 +40,7 @@
   }
 
   // --- Éléments, par rôle déclaré dans le markup (voir dom.js) --------------
+  var scene = el.scene, contenu = el.contenu;
   var compteur = el.compteur, heure = el.heure, palier = el.palier;
   var postit = el.postit, piste = el.piste, retour = el.retour;
   var h1 = el.titre, favicon = el.favicon;
@@ -75,6 +76,29 @@
     });
   })();
 
+  // --- Le contenu doit tenir dans l'écran -----------------------------------
+  // Les tailles sont posées en CSS ; ici on ne touche qu'à --echelle, le facteur
+  // commun au titre, aux touches et au chrono. Un message plus long qu'un autre
+  // rétrécit au lieu de pousser le chronomètre sous le bandeau défilant.
+  var ECHELLE_MIN = 0.38, PAS = 0.94, MARGE_SECOUSSE = 8;
+  function hauteurDisponible(){
+    // clientHeight inclut le padding : la place réelle pour .contenu, c'est la
+    // boîte de contenu. La marge couvre l'amplitude de la secousse de main, qui
+    // oscille alors que le bandeau, lui, ne bouge pas.
+    var cs = getComputedStyle(scene);
+    return scene.clientHeight
+         - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)
+         - MARGE_SECOUSSE;
+  }
+  function ajusterEchelle(){
+    var e = 1, dispo = hauteurDisponible();
+    contenu.style.setProperty('--echelle', e);
+    for (var i = 0; i < 24 && contenu.getBoundingClientRect().height > dispo && e > ECHELLE_MIN; i++) {
+      e *= PAS;
+      contenu.style.setProperty('--echelle', e);
+    }
+  }
+
   // --- Titre aléatoire ------------------------------------------------------
   (function(){
     var choix = M.titresH1[Math.floor(Math.random() * M.titresH1.length)];
@@ -82,8 +106,14 @@
     h1.append(perso(choix[0]));
     var flash = document.createElement('span');
     flash.className = 'flash';
-    flash.textContent = perso(choix[1]);
-    h1.append(flash, perso(choix[2]));
+    var surligne = perso(choix[1]), apres = perso(choix[2]);
+    // Le surlignage occupe toute la largeur de la ligne, donc ce qui suit passe
+    // toujours au-dessous. Une ponctuation seule s'y retrouverait isolée au
+    // milieu d'une ligne vide : on la colle au surlignage.
+    var seule = /^([.,;:!?\u2026]+)\s*$/.exec(apres);
+    if (seule) { surligne += seule[1]; apres = ''; }
+    flash.textContent = surligne;
+    h1.append(flash, apres);
   })();
 
   // --- Bandeau défilant -----------------------------------------------------
@@ -94,15 +124,19 @@
     var largeur = piste.scrollWidth / 2;
     document.documentElement.style.setProperty('--duree-bandeau', Math.max(20, Math.round(largeur / 80)) + 's');
   }
-  reglerBandeau();
-  window.addEventListener('resize', reglerBandeau);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reglerBandeau);
+  function replacer(){ reglerBandeau(); ajusterEchelle(); }
+  // Premier calage une fois le bandeau rempli : avant, main est plus haut qu'il ne sera.
+  replacer();
+  window.addEventListener('resize', replacer);
+  // Anton change les métriques en arrivant : on remesure une fois chargée.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(replacer);
 
   // --- Paliers et piques qui tournent ---------------------------------------
   var palierActuel = -1, timerPique = null;
   var indexPique = Math.floor(Math.random() * M.piques.length);
   function afficherLigne(txt){
     palier.textContent = perso(txt);
+    ajusterEchelle();
     rejouer(palier, 'change');
   }
   function relancerPiques(){
