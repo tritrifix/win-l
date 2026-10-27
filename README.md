@@ -35,7 +35,7 @@ La page masque le curseur après 2,5 s, bloque le clic droit et les raccourcis d
 
 ### Sans rien installer
 
-Ouvre `index.html` dans un navigateur. Le fichier est autonome : polices (Anton, IBM Plex Mono), styles et script sont intégrés, aucune ressource externe n'est chargée.
+Ouvre `index.html` dans un navigateur. La page charge ses styles, ses scripts et ses polices depuis le dossier `assets/` à côté d'elle : garde les deux ensemble, mais rien n'est téléchargé depuis Internet, tout est dans le dépôt.
 
 ### Avec Docker
 
@@ -53,21 +53,43 @@ docker compose down   # pour l'arrêter
 
 ```
 .
-├── index.html           # la page complète (HTML, CSS, JS et polices en base64)
-├── docker-compose.yml   # service nginx qui monte index.html en lecture seule
+├── index.html            # le markup seul
+├── assets/
+│   ├── messages.js       # tous les textes : raccourcis, titres, piques, paliers
+│   ├── dom.js            # la frontière markup / logique : rôles data-role
+│   ├── app.js            # la logique
+│   ├── style.css         # la feuille de style
+│   ├── fonts.css         # les trois @font-face
+│   └── fonts/            # Anton et IBM Plex Mono en .woff2
+├── docker-compose.yml    # service nginx qui monte index.html et assets/ en lecture seule
 └── docs/
-    └── illustration.svg # l'illustration de ce README
+    └── illustration.svg  # l'illustration de ce README
 ```
 
 ## Personnaliser
 
-Tout se règle dans `index.html` :
+Les textes sont tous dans `assets/messages.js`, séparés de la logique et du markup : tu peux les réécrire sans ouvrir une seule ligne de code.
 
 - **Titres** : tableau `titresH1`, chaque entrée est `[avant, texte surligné, après]`.
 - **Piques du bandeau** : tableau `piques`.
 - **Paliers de temps** : tableau `paliers`, sous la forme `[secondes, message]`.
-- **Raccourcis** : objet `RACCOURCIS`, une entrée `windows` et une entrée `macos`. Chacune porte son nom, son titre d'onglet, et `touches` : la liste des touches dans l'ordre où elles s'enfoncent (du SVG ou une lettre).
-- **Couleurs** : variables CSS dans `:root` (`--jaune`, `--rouge`, `--noir`…).
+- **Raccourcis** : objet `raccourcis`, une entrée `windows` et une entrée `macos`. Chacune porte son nom, son titre d'onglet et `touches` : la liste des touches dans l'ordre où elles s'enfoncent. Une entrée est soit un nom de logo connu d'`app.js` (`win`, `command`, `control`), soit le caractère à afficher tel quel.
+- **Rapport d'incident, post-it, message de fermeture** : clés `rapport`, `postitDate` et `confirmationFermeture`.
+- **Couleurs** : variables CSS dans `:root`, au début d'`assets/style.css` (`--jaune`, `--rouge`, `--noir`…).
+
+Les libellés fixes de la page — l'étiquette « Poste non verrouillé », le texte du post-it, « Ah, te voilà. » — restent dans `index.html` : ils n'y sont écrits qu'une fois, les dupliquer dans `messages.js` ne ferait que créer deux vérités à maintenir.
+
+### Déplacer ou renommer un élément de la page
+
+`app.js` ne connaît aucun identifiant : il demande un **rôle**. Le markup déclare le sien avec `data-role`, et `assets/dom.js` est le seul fichier à relier les deux.
+
+```html
+<b data-role="compteur">00:00</b>
+```
+
+Pour déplacer le chronomètre ailleurs dans la page, emporte son `data-role` avec lui : rien d'autre à changer. Pour ajouter un élément piloté par le script, ajoute son rôle à la liste `ROLES` de `dom.js`. Un rôle déclaré mais absent du markup est signalé dans la console au chargement, au lieu de casser plus loin sur un `null`.
+
+Les classes CSS (`.ecran`, `.palier`, `.touche`…) restent le point de contact entre `index.html` et `style.css` ; la page n'utilise plus aucun `id`.
 
 N'écris pas le raccourci en dur dans les textes : utilise les jetons, résolus au chargement selon le système.
 
